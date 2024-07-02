@@ -17,7 +17,7 @@ struct Node
     {
         parent = nullptr; // Inicializa o ponteiro para o pai como nulo 
         left = nullptr; // Inicializa o ponteiro para o filho à esquerda como nulo
-        right = nullptr; // Inicializa o ponteiro para o filho á direita como nulo
+        right = nullptr; // Inicializa o ponteiro para o filho à direita como nulo
         color = RED;  // Inicializa a cor do nó como RED por padrão
     }
 };
