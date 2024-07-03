@@ -8,49 +8,51 @@
 enum Color { RED, BLACK };
 
 // Estrutura do nó para a árvore rubro-negra
+template <typename T>
 struct Node {
-    int data; // Dados armazenados no nó (a chave do nó)
+    T data; // Dados armazenados no nó (a chave do nó)
     Color color; // Cor do nó, que pode ser RED ou BLACK
-    Node *left; // Pnteiro para o filho à esquerda do nó
+    Node *left; // Ponteiro para o filho à esquerda do nó
     Node *right; // Ponteiro para o filho à direita do nó
     Node *parent; // Ponteiro para o pai do nó
 
     // Declaração do construtor do nó
-    Node(int data);
+    Node(T data);
 };
 
 // Classe que representa a árvore rubro-negra
+template <typename T>
 class RBTree {
 private:
-    Node* root;
-    Node* TNULL;
+    Node<T>* root;
+    Node<T>* TNULL;
 
-    void initializeNULLNode(Node* node, Node* parent);
-    void preOrderHelper(Node* node);
-    void inOrderHelper(Node* node);
-    void postOrderHelper(Node* node);
-    Node* searchTreeHelper(Node* node, int key);
-    void balanceInsert(Node* k);
-    void balanceDelete(Node* x);
-    void printHelper(Node* root, std::string indent, bool last);
-    void rbTransplant(Node* u, Node* v);
-    void deleteNodeHelper(Node* node, int key);
+    void initializeNULLNode(Node<T>* node, Node<T>* parent);
+    void preOrderHelper(Node<T>* node);
+    void inOrderHelper(Node<T>* node);
+    void postOrderHelper(Node<T>* node);
+    Node<T>* searchTreeHelper(Node<T>* node, T key);
+    void balanceInsert(Node<T>* k);
+    void balanceDelete(Node<T>* x);
+    void printHelper(Node<T>* root, std::string indent, bool last);
+    void rbTransplant(Node<T>* u, Node<T>* v);
+    void deleteNodeHelper(Node<T>* node, T key);
 
 public:
     RBTree();
     void preorder();
     void inorder();
     void postorder();
-    Node* searchTree(int k);
-    Node* minimum(Node* node);
-    Node* maximum(Node* node);
-    Node* successor(Node* x);
-    Node* predecessor(Node* x);
-    void leftRotate(Node* x);
-    void rightRotate(Node* x);
-    void insert(int key);
-    Node* getRoot();
-    void deleteNode(int data);
+    Node<T>* searchTree(T k);
+    Node<T>* minimum(Node<T>* node);
+    Node<T>* maximum(Node<T>* node);
+    Node<T>* successor(Node<T>* x);
+    Node<T>* predecessor(Node<T>* x);
+    void leftRotate(Node<T>* x);
+    void rightRotate(Node<T>* x);
+    void insert(T key);
+    Node<T>* getRoot();
+    void deleteNode(T data);
     void printTree();
 };
 
