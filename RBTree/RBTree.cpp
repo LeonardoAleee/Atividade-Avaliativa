@@ -2,8 +2,8 @@
 
 // Construtor do nó
 template <typename T>
-Node<T>::Node(T data): data(data) {
-    parent = nullptr; // Inicializa o ponteiro para o pai como nulo 
+Node<T>::Node(T data) : data(data) {
+    parent = nullptr; // Inicializa o ponteiro para o pai como nulo
     left = nullptr; // Inicializa o ponteiro para o filho à esquerda como nulo
     right = nullptr; // Inicializa o ponteiro para o filho à direita como nulo
     color = RED;  // Inicializa a cor do nó como RED por padrão
@@ -60,11 +60,8 @@ void RBTree<T>::postOrderHelper(Node<T>* node) {
 // Função auxiliar para buscar uma chave na árvore
 template <typename T>
 Node<T>* RBTree<T>::searchTreeHelper(Node<T>* node, T key) {
-    if (node == TNULL) {
-        return nullptr;  // Se o nó é TNULL, retorna nullptr
-    }
-    if (key == node->data) {  // Se o nó contém a chave procurada
-        return node;  // Retorna o nó encontrado
+    if (node == TNULL || key == node->data) {
+        return node;  // Se o nó é TNULL ou contém a chave procurada, retorna o nó
     }
     if (key < node->data) {  // Se a chave procurada é menor que a chave do nó atual
         return searchTreeHelper(node->left, key);  // Busca na subárvore esquerda
@@ -344,7 +341,7 @@ void RBTree<T>::balanceDelete(Node<T>* x) {
                 s = x->parent->left;  // Atualiza o irmão
             }
             // Se ambos os filhos do irmão são pretos
-            if (s->right->color == BLACK && s->right->color == BLACK) {
+            if (s->right->color == BLACK && s->left->color == BLACK) {
                 s->color = RED;  // O irmão vira vermelho
                 x = x->parent;  // Atualiza x para o pai
             } else {
@@ -382,22 +379,22 @@ void RBTree<T>::rbTransplant(Node<T>* u, Node<T>* v) {
 template <typename T>
 void RBTree<T>::deleteNodeHelper(Node<T>* node, T key) {
     Node<T>* z = TNULL;  // Nó a ser excluído
-    Node<T>* x; // Nó substituto 
-    Node<T>* y; // Nó para a troca de chaves
+    Node<T>* x;  // Nó substituto
+    Node<T>* y;  // Nó para a troca de chaves
     while (node != TNULL) {  // Procura o nó com a chave fornecida
         if (node->data == key) {
             z = node;  // Encontrou o nó a ser excluído
         }
-        if (node->data <= key) { 
-            node = node->right; // Move para a direita
+        if (node->data <= key) {
+            node = node->right;  // Move para a direita
         } else {
-            node = node->left; // Move para a esquerda
+            node = node->left;  // Move para a esquerda
         }
     }
     if (z == TNULL) {  // Se o nó não foi encontrado
         std::cout << "Couldn't find key in the tree" << std::endl;  // Imprime mensagem de erro
         return;  // Retorna sem excluir o nó
-    } 
+    }
     y = z;  // O nó a ser excluído é o nó z
     Color y_original_color = y->color;  // Armazena a cor original de y
     if (z->left == TNULL) {  // Se o nó a ser excluído não tem filho esquerdo
@@ -428,7 +425,101 @@ void RBTree<T>::deleteNodeHelper(Node<T>* node, T key) {
     }
 }
 
+// Função pública para validar as propriedades da árvore rubro-negra
+template <typename T>
+bool RBTree<T>::validateRBTree() {
+    if (root->color != BLACK) {
+        std::cout << "A raiz não é preta!" << std::endl;
+        return false;
+    }
+
+    int blackCount = 0;
+    Node<T>* node = root;
+    while (node != TNULL) {
+        if (node->color == BLACK) {
+            blackCount++;
+        }
+        node = node->left;
+    }
+
+    return checkRBProperties(root, blackCount, 0);
+}
+
+// Função auxiliar para validar as propriedades da árvore rubro-negra
+template <typename T>
+bool RBTree<T>::validateHelper(Node<T>* node) {
+    if (node == TNULL) return true;
+
+    if (node->color == RED) {
+        if (node->left->color != BLACK || node->right->color != BLACK) {
+            std::cout << "Nó vermelho com filhos não pretos encontrado: " << node->data << std::endl;
+            return false;
+        }
+    }
+
+    if (!validateHelper(node->left) || !validateHelper(node->right)) {
+        return false;
+    }
+
+    return true;
+}
+
+// Função pública para calcular a altura da árvore
+template <typename T>
+int RBTree<T>::height() {
+    return calculateHeight(root);
+}
+
+// Função auxiliar para calcular a altura da árvore
+template <typename T>
+int RBTree<T>::calculateHeight(Node<T>* node) {
+    if (node == TNULL) return 0;
+
+    int leftHeight = calculateHeight(node->left);
+    int rightHeight = calculateHeight(node->right);
+
+    return std::max(leftHeight, rightHeight) + 1;
+}
+
+// Função pública para obter o nó TNULL
+template <typename T>
+Node<T>* RBTree<T>::getTNULL() {
+    return TNULL;
+}
+
+template <typename T>
+bool RBTree<T>::checkRBProperties(Node<T>* node, int& blackCount, int pathBlackCount) {
+    if (node == TNULL) {
+        if (pathBlackCount == blackCount) {
+            return true;
+        } else {
+            std::cout << "Número de nós pretos em um caminho não é consistente!" << std::endl;
+            return false;
+        }
+    }
+
+    if (node->color == RED) {
+        if (node->left->color != BLACK || node->right->color != BLACK) {
+            std::cout << "Nó vermelho com filhos não pretos encontrado: " << node->data << std::endl;
+            return false;
+        }
+    }
+
+    if (node->color == BLACK) {
+        pathBlackCount++;
+    }
+
+    if (!checkRBProperties(node->left, blackCount, pathBlackCount)) {
+        return false;
+    }
+
+    if (!checkRBProperties(node->right, blackCount, pathBlackCount)) {
+        return false;
+    }
+
+    return true;
+}
+
 // Declaração explícita das instâncias do template
 template class Node<int>;
 template class RBTree<int>;
-
