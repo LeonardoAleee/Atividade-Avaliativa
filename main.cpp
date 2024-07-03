@@ -2,7 +2,7 @@
 
 // Função para testar a inserção de nós na árvore rubro-negra
 void testInsert() {
-    RBTree bst;
+    RBTree<int> bst;
 
     // Inserções iniciais
     bst.insert(55);  // Insere a chave 55 na árvore
@@ -40,7 +40,7 @@ void testInsert() {
 
 // Função para testar a exclusão de nós na árvore rubro-negra
 void testDelete() {
-    RBTree bst;
+    RBTree<int> bst;
 
     // Inserções iniciais
     bst.insert(55);  // Insere a chave 55 na árvore
@@ -107,7 +107,7 @@ void testDelete() {
 
 // Função para testar a busca de nós na árvore rubro-negra
 void testSearch() {
-    RBTree bst;
+    RBTree<int> bst;
 
     // Inserções iniciais
     bst.insert(55);
@@ -118,7 +118,7 @@ void testSearch() {
     bst.insert(57);
 
     // Buscas iniciais
-    Node* result = bst.searchTree(65);
+    Node<int>* result = bst.searchTree(65);
     std::cout << "Busca 65: " << (result != nullptr ? "Encontrado\n" : "Não Encontrado\n");
 
     result = bst.searchTree(40);
@@ -163,7 +163,7 @@ void testSearch() {
     std::cout << "Busca 50: " << (result != nullptr ? "Encontrado\n" : "Não Encontrado\n");
 
     // Teste de busca em árvore vazia
-    RBTree emptyTree;
+    RBTree<int> emptyTree;
     result = emptyTree.searchTree(1);
     std::cout << "Busca em árvore vazia (1): " << (result != nullptr ? "Encontrado\n" : "Não Encontrado\n");
 }
