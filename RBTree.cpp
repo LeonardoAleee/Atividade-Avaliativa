@@ -1,7 +1,8 @@
 #include "RBTree.h"
 
 // Construtor do nó
-Node::Node(int data): data(data) {
+template <typename T>
+Node<T>::Node(T data): data(data) {
     parent = nullptr; // Inicializa o ponteiro para o pai como nulo 
     left = nullptr; // Inicializa o ponteiro para o filho à esquerda como nulo
     right = nullptr; // Inicializa o ponteiro para o filho à direita como nulo
@@ -9,15 +10,17 @@ Node::Node(int data): data(data) {
 }
 
 // Construtor da classe RBTree que inicializa a árvore com um nó TNULL
-RBTree::RBTree() {
-    TNULL = new Node(0);  // Cria um novo nó TNULL
+template <typename T>
+RBTree<T>::RBTree() {
+    TNULL = new Node<T>(T());  // Cria um novo nó TNULL com valor padrão de T
     TNULL->color = BLACK;  // Define a cor de TNULL como BLACK
     root = TNULL;  // Inicializa a raiz como o nó TNULL
 }
 
 // Inicializa um nó TNULL com dados nulos e cor preta
-void RBTree::initializeNULLNode(Node* node, Node* parent) {
-    node->data = 0;  // Dados nulos para o nó TNULL
+template <typename T>
+void RBTree<T>::initializeNULLNode(Node<T>* node, Node<T>* parent) {
+    node->data = T();  // Dados nulos para o nó TNULL
     node->parent = parent;  // Define o pai do nó TNULL
     node->left = nullptr;  // O nó TNULL não tem filho à esquerda
     node->right = nullptr;  // O nó TNULL não tem filho à direita
@@ -25,7 +28,8 @@ void RBTree::initializeNULLNode(Node* node, Node* parent) {
 }
 
 // Função auxiliar para percurso preOrder da árvore
-void RBTree::preOrderHelper(Node* node) {
+template <typename T>
+void RBTree<T>::preOrderHelper(Node<T>* node) {
     if (node != TNULL) {  // Se o nó não for o TNULL
         std::cout << node->data << " ";  // Imprime os dados do nó
         preOrderHelper(node->left);  // Percorre a subárvore à esquerda
@@ -34,7 +38,8 @@ void RBTree::preOrderHelper(Node* node) {
 }
 
 // Função auxiliar para percurso inOrder da árvore
-void RBTree::inOrderHelper(Node* node) {
+template <typename T>
+void RBTree<T>::inOrderHelper(Node<T>* node) {
     if (node != TNULL) {  // Se o nó não for o TNULL
         inOrderHelper(node->left);  // Percorre a subárvore à esquerda
         std::cout << node->data << " ";  // Imprime os dados do nó
@@ -43,7 +48,8 @@ void RBTree::inOrderHelper(Node* node) {
 }
 
 // Função auxiliar para percurso postOrder da árvore
-void RBTree::postOrderHelper(Node* node) {
+template <typename T>
+void RBTree<T>::postOrderHelper(Node<T>* node) {
     if (node != TNULL) {  // Se o nó não for o TNULL
         postOrderHelper(node->left);  // Percorre a subárvore à esquerda
         postOrderHelper(node->right);  // Percorre a subárvore à direita
@@ -52,7 +58,8 @@ void RBTree::postOrderHelper(Node* node) {
 }
 
 // Função auxiliar para buscar uma chave na árvore
-Node* RBTree::searchTreeHelper(Node* node, int key) {
+template <typename T>
+Node<T>* RBTree<T>::searchTreeHelper(Node<T>* node, T key) {
     if (node == TNULL) {
         return nullptr;  // Se o nó é TNULL, retorna nullptr
     }
@@ -66,8 +73,9 @@ Node* RBTree::searchTreeHelper(Node* node, int key) {
 }
 
 // Função auxiliar para balancear a árvore após a inserção de um novo nó
-void RBTree::balanceInsert(Node* k) {
-    Node* u;  // Nó tio (uncle)
+template <typename T>
+void RBTree<T>::balanceInsert(Node<T>* k) {
+    Node<T>* u;  // Nó tio (uncle)
     while (k->parent->color == RED) {  // Enquanto o pai do nó k for vermelho
         if (k->parent == k->parent->parent->right) {  // Se o pai de k é o filho direito do avô
             u = k->parent->parent->left;  // O tio é o filho esquerdo do avô
@@ -110,7 +118,8 @@ void RBTree::balanceInsert(Node* k) {
 }
 
 // Função auxiliar para imprimir a árvore com a indentação apropriada
-void RBTree::printHelper(Node* root, std::string indent, bool last) {
+template <typename T>
+void RBTree<T>::printHelper(Node<T>* root, std::string indent, bool last) {
     if (root != TNULL) {  // Se o nó não for TNULL
         std::cout << indent;  // Imprime a indentação
         if (last) {
@@ -128,27 +137,32 @@ void RBTree::printHelper(Node* root, std::string indent, bool last) {
 }
 
 // Função pública para iniciar o percurso preOrder da árvore
-void RBTree::preorder() {
+template <typename T>
+void RBTree<T>::preorder() {
     preOrderHelper(this->root);  // Chama a função auxiliar para percurso preOrder
 }
 
 // Função pública para iniciar o percurso inOrder da árvore
-void RBTree::inorder() {
+template <typename T>
+void RBTree<T>::inorder() {
     inOrderHelper(this->root);  // Chama a função auxiliar para percurso inOrder
 }
 
 // Função pública para iniciar o percurso postOrder da árvore
-void RBTree::postorder() {
+template <typename T>
+void RBTree<T>::postorder() {
     postOrderHelper(this->root);  // Chama a função auxiliar para percurso postOrder
 }
 
 // Função pública para buscar uma chave na árvore
-Node* RBTree::searchTree(int k) {
+template <typename T>
+Node<T>* RBTree<T>::searchTree(T k) {
     return searchTreeHelper(this->root, k);  // Chama a função auxiliar para busca
 }
 
 // Função pública para encontrar o nó com a menor chave a partir do nó dado
-Node* RBTree::minimum(Node* node) {
+template <typename T>
+Node<T>* RBTree<T>::minimum(Node<T>* node) {
     while (node->left != TNULL) {  // Vai para o filho mais à esquerda
         node = node->left;
     }
@@ -156,7 +170,8 @@ Node* RBTree::minimum(Node* node) {
 }
 
 // Função pública para encontrar o nó com a maior chave a partir do nó dado
-Node* RBTree::maximum(Node* node) {
+template <typename T>
+Node<T>* RBTree<T>::maximum(Node<T>* node) {
     while (node->right != TNULL) {  // Vai para o filho mais à direita
         node = node->right;
     }
@@ -164,11 +179,12 @@ Node* RBTree::maximum(Node* node) {
 }
 
 // Função pública para encontrar o sucessor de um nó
-Node* RBTree::successor(Node* x) {
+template <typename T>
+Node<T>* RBTree<T>::successor(Node<T>* x) {
     if (x->right != TNULL) {  // Se x tem um filho direito
         return minimum(x->right);  // O sucessor é o mínimo na subárvore direita
     }
-    Node* y = x->parent;  // O sucessor é o mais próximo pai em relação a x
+    Node<T>* y = x->parent;  // O sucessor é o mais próximo pai em relação a x
     while (y != TNULL && x == y->right) {  // Move para cima até encontrar um pai que é o filho esquerdo
         x = y;
         y = y->parent;
@@ -177,11 +193,12 @@ Node* RBTree::successor(Node* x) {
 }
 
 // Função pública para encontrar o antecessor de um nó
-Node* RBTree::predecessor(Node* x) {
+template <typename T>
+Node<T>* RBTree<T>::predecessor(Node<T>* x) {
     if (x->left != TNULL) {  // Se x tem um filho esquerdo
         return maximum(x->left);  // O antecessor é o máximo na subárvore esquerda
     }
-    Node* y = x->parent;  // O antecessor é o mais próximo pai em relação a x
+    Node<T>* y = x->parent;  // O antecessor é o mais próximo pai em relação a x
     while (y != TNULL && x == y->left) {  // Move para cima até encontrar um pai que é o filho direito
         x = y;
         y = y->parent;
@@ -190,8 +207,9 @@ Node* RBTree::predecessor(Node* x) {
 }
 
 // Função pública para realizar uma rotação à esquerda no nó x
-void RBTree::leftRotate(Node* x) {
-    Node* y = x->right;  // O filho direito de x se tornará o novo pai
+template <typename T>
+void RBTree<T>::leftRotate(Node<T>* x) {
+    Node<T>* y = x->right;  // O filho direito de x se tornará o novo pai
     x->right = y->left;  // O filho esquerdo de y se tornará o filho direito de x
     if (y->left != TNULL) {  // Se y tem um filho esquerdo
         y->left->parent = x;  // Atualiza o pai do filho esquerdo de y para x
@@ -209,8 +227,9 @@ void RBTree::leftRotate(Node* x) {
 }
 
 // Função pública para realizar uma rotação à direita no nó x
-void RBTree::rightRotate(Node* x) {
-    Node* y = x->left;  // O filho esquerdo de x se tornará o novo pai
+template <typename T>
+void RBTree<T>::rightRotate(Node<T>* x) {
+    Node<T>* y = x->left;  // O filho esquerdo de x se tornará o novo pai
     x->left = y->right;  // O filho direito de y se tornará o filho esquerdo de x
     if (y->right != TNULL) {  // Se y tem um filho direito
         y->right->parent = x;  // Atualiza o pai do filho direito de y para x
@@ -228,16 +247,17 @@ void RBTree::rightRotate(Node* x) {
 }
 
 // Função pública para inserir uma nova chave na árvore
-void RBTree::insert(int key) {
-    Node* node = new Node(key);  // Cria um novo nó com a chave fornecida
+template <typename T>
+void RBTree<T>::insert(T key) {
+    Node<T>* node = new Node<T>(key);  // Cria um novo nó com a chave fornecida
     node->parent = nullptr;  // Inicializa o pai do nó como nulo
     node->data = key;  // Define os dados do nó como a chave fornecida
     node->left = TNULL;  // Inicializa o filho esquerdo como TNULL
     node->right = TNULL;  // Inicializa o filho direito como TNULL
     node->color = RED;  // A nova chave é inicialmente vermelha
 
-    Node* y = nullptr;  // Nó pai do novo nó
-    Node* x = this->root;  // Inicia a busca a partir da raiz
+    Node<T>* y = nullptr;  // Nó pai do novo nó
+    Node<T>* x = this->root;  // Inicia a busca a partir da raiz
 
     while (x != TNULL) {  // Enquanto x não for TNULL
         y = x;  // Atualiza y para x
@@ -266,25 +286,29 @@ void RBTree::insert(int key) {
 }
 
 // Função pública para obter a raiz da árvore
-Node* RBTree::getRoot() {
+template <typename T>
+Node<T>* RBTree<T>::getRoot() {
     return this->root;  // Retorna a raiz da árvore
 }
 
 // Função pública para excluir um nó com a chave fornecida
-void RBTree::deleteNode(int data) {
+template <typename T>
+void RBTree<T>::deleteNode(T data) {
     deleteNodeHelper(this->root, data);  // Chama a função auxiliar para exclusão
 }
 
 // Função pública para imprimir a árvore
-void RBTree::printTree() {
+template <typename T>
+void RBTree<T>::printTree() {
     if (root) {  // Se a árvore não está vazia
         printHelper(this->root, "", true);  // Chama a função auxiliar para impressão
     }
 }
 
 // Função auxiliar para balancear a árvore após a exclusão de um nó
-void RBTree::balanceDelete(Node* x) {
-    Node* s;  // Nó irmão
+template <typename T>
+void RBTree<T>::balanceDelete(Node<T>* x) {
+    Node<T>* s;  // Nó irmão
     while (x != root && x->color == BLACK) {  // Enquanto x não for a raiz e sua cor for BLACK
         if (x == x->parent->left) {  // Se x é o filho esquerdo do pai
             s = x->parent->right;  // O irmão é o filho direito do pai
@@ -342,7 +366,8 @@ void RBTree::balanceDelete(Node* x) {
 }
 
 // Função auxiliar para substituir um nó u por um nó v
-void RBTree::rbTransplant(Node* u, Node* v) {
+template <typename T>
+void RBTree<T>::rbTransplant(Node<T>* u, Node<T>* v) {
     if (u->parent == nullptr) {  // Se u é a raiz
         root = v;  // v se torna a nova raiz
     } else if (u == u->parent->left) {  // Se u é o filho esquerdo do pai
@@ -354,10 +379,11 @@ void RBTree::rbTransplant(Node* u, Node* v) {
 }
 
 // Função auxiliar para excluir um nó da árvore
-void RBTree::deleteNodeHelper(Node* node, int key) {
-    Node* z = TNULL;  // Nó a ser excluído
-    Node* x; // Nó substituto 
-    Node* y; // Nó para a troca de chaves
+template <typename T>
+void RBTree<T>::deleteNodeHelper(Node<T>* node, T key) {
+    Node<T>* z = TNULL;  // Nó a ser excluído
+    Node<T>* x; // Nó substituto 
+    Node<T>* y; // Nó para a troca de chaves
     while (node != TNULL) {  // Procura o nó com a chave fornecida
         if (node->data == key) {
             z = node;  // Encontrou o nó a ser excluído
@@ -401,3 +427,8 @@ void RBTree::deleteNodeHelper(Node* node, int key) {
         balanceDelete(x);  // Rebalanceia a árvore
     }
 }
+
+// Declaração explícita das instâncias do template
+template class Node<int>;
+template class RBTree<int>;
+
