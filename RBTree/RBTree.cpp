@@ -487,6 +487,7 @@ Node<T>* RBTree<T>::getTNULL() {
     return TNULL;
 }
 
+// Função auxiliar para verificar a consistência do número de nós pretos
 template <typename T>
 bool RBTree<T>::checkRBProperties(Node<T>* node, int& blackCount, int pathBlackCount) {
     if (node == TNULL) {
