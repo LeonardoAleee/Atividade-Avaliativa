@@ -37,7 +37,8 @@ private:
     void printHelper(Node<T>* root, std::string indent, bool last);
     void rbTransplant(Node<T>* u, Node<T>* v);
     void deleteNodeHelper(Node<T>* node, T key);
-
+    bool validateHelper(Node<T>* node);
+    int calculateHeight(Node<T>* node);
 public:
     RBTree();
     void preorder();
@@ -54,6 +55,10 @@ public:
     Node<T>* getRoot();
     void deleteNode(T data);
     void printTree();
+    bool validateRBTree();
+    int height();
+    Node<T>* getTNULL(); // Novo método para obter TNULL
+    bool checkRBProperties(Node<T>* node, int& blackCount, int pathBlackCount);  // Verificar propriedades da árvore rubro-negra
 };
 
 #endif
